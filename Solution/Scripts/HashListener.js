@@ -28,7 +28,7 @@ var HashListener = {
             }
 
             if (hashes != newValue) {
-                var url = HashListener.ConstructString();
+                var url = HashListener.ConstructUrlString();
                 history.pushState(null, HashListener.HistoryName, url);
                 if (reg.ChangedCallback) {
                     if (!hashes) {
@@ -71,7 +71,7 @@ var HashListener = {
         });
     },
 
-    ConstructString: function () {
+    ConstructUrlString: function () {
         var url = '?';
         var found = [];
         $.each(HashListener.Registrations, function (index, reg) {

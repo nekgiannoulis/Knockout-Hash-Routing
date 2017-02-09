@@ -10,20 +10,23 @@
 </head>
 <body>
 
-    Hey there
-    <br />
-    test content: <span data-bind="text: Test"></span>
-    <br />
+    <h2>Welcome <span data-bind="text: Username"></span></h2>
 
-<input type="button" data-bind="click: UpdateTest" value="test 1" />
-<br/>
-    test content 2: <span data-bind="text: Test2"></span>
-<br />
-<input type="button" data-bind="click: UpdateTest2" value="test 2"/>
-    
-    <br />
-<br/>
-    <input type="button" data-bind="click: GeneralTesting" value="test 2" />
+    <div data-bind="visible: NavigationId()=='welcome'">
+        This is a welcome page
+        <br />
+        <input type="button" data-bind="click: Navigate.bind($data,'about')" value="About" />
+    </div>
+
+
+    <div data-bind="visible: NavigationId()=='about'">
+        This is the about
+        <br />
+        <input type="button" data-bind="click: Navigate.bind($data,'welcome')" value="Welcome" />
+    </div>
+
+
+
 
 </body>
 </html>
