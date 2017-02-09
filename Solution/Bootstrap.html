@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <script src="Scripts/jquery-3.1.1.js" type="text/javascript"></script>
+    <script src="Scripts/knockout-3.4.0.js" type="text/javascript"></script>
+    <script src="Scripts/HashListener.js" type="text/javascript"></script>
+    <script src="PageScripts/bootstrap.js" type="text/javascript"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+
+        <h2>Bootstrap test</h2>
+
+
+        <ul class="nav nav-pills">
+            <li data-bind="css: { active: NavigationId() == 'home' }">
+                <a href="#" data-bind="click: Navigate.bind($data,'home')">Home</a>
+            </li>
+            <li data-bind="css: { active: NavigationId() =='selCol' }">
+                <a href="#" data-bind="click: Navigate.bind($data,'selCol')">Select Color</a>
+            </li>
+            <li data-bind="css: { active: NavigationId() =='selPlan' }">
+                <a href="#" data-bind="click: Navigate.bind($data,'selPlan')">Select Plan</a>
+            </li>
+        </ul>
+
+        <h3><span data-bind="text: NavigationId"></span></h3>
+
+        <div data-bind="visible: NavigationId() == 'home'">
+            Welcome to home
+        </div>
+
+        <div data-bind="visible: NavigationId() == 'selCol'">
+            Select a color of your preference
+            <select data-bind="options: ColorTab.AvailableColors, value: ColorTab.SelectedColor"></select>
+        </div>
+
+        <div data-bind="visible: NavigationId() == 'selPlan'">
+            Select a plan:
+            <select data-bind="options: PlansTab.AvailablePlans,
+                               optionsText: 'Text',
+                               optionsValue:'Key',
+                               value: PlansTab.PlanKey"></select>
+            <br />
+            <br />
+
+            <span data-bind="text: PlansTab.SelectedPlan().Descr"></span>
+            <br />
+            price: <span data-bind="text: PlansTab.SelectedPlan().Price"></span>
+        </div>
+
+  
+
+    </div>
+</body>
+</html>
