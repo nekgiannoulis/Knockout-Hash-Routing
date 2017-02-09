@@ -5,18 +5,19 @@ var HashListener = {
     Registrations: [],
 
     Register: function (parameterName, koObservable, changedCallback) {
-        var params = HashListener.GetUrlVars();
-        var val = params[parameterName];
-        if (val) {
-            koObservable(val);
-        }
-
         koObservable.HashRegistration = {
             ParameterName: parameterName,
             KoObservable: koObservable,
             ChangedCallback: changedCallback,
             InitialValue: koObservable()
         };
+
+        var params = HashListener.GetUrlVars();
+        var val = params[parameterName];
+        if (val) {
+            koObservable(val);
+        }
+
         HashListener.Registrations.push(koObservable.HashRegistration);
 
         koObservable.subscribe(function (newValue) {
@@ -38,7 +39,7 @@ var HashListener = {
                 }
             }
         });
-
+        
         window.onpopstate = function (e) {
             var vars = HashListener.GetUrlVars();
             $.each(HashListener.Registrations, function (index, reg) {
