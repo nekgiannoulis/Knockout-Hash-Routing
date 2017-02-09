@@ -28,7 +28,7 @@ var HashListener = {
 
             if (hashes != newValue) {
                 var url = HashListener.ConstructString();
-                history.pushState(null, HistoryName, url);
+                history.pushState(null, HashListener.HistoryName, url);
                 if (reg.ChangedCallback) {
                     if (!hashes) {
                         reg.ChangedCallback(reg.InitialValue, newValue);
