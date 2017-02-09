@@ -39,25 +39,9 @@ var HashListener = {
                 }
             }
         });
-        
+
         window.onpopstate = function (e) {
-            var vars = HashListener.GetUrlVars();
-            $.each(HashListener.Registrations, function (index, reg) {
-                var paramValue = vars[reg.ParameterName];
-                if (!paramValue) {
-                    if (reg.InitialValue != reg.KoObservable()) {
-                        if (reg.ChangedCallback) {
-                            reg.ChangedCallback(reg.KoObservable(), reg.InitialValue);
-                        }
-                        reg.KoObservable(reg.InitialValue);
-                    }
-                } else if (paramValue != reg.KoObservable()) {
-                    if (reg.ChangedCallback) {
-                        reg.ChangedCallback(reg.KoObservable(), paramValue);
-                    }
-                    reg.KoObservable(paramValue);
-                }
-            });
+            HashListener.UpdateFromUrl();
         }
 
         if (koObservable()) {
@@ -65,6 +49,26 @@ var HashListener = {
                 koObservable.HashRegistration.ChangedCallback(null, koObservable());
             }
         }
+    },
+
+    UpdateFromUrl: function () {
+        var vars = HashListener.GetUrlVars();
+        $.each(HashListener.Registrations, function (index, reg) {
+            var paramValue = vars[reg.ParameterName];
+            if (!paramValue) {
+                if (reg.InitialValue != reg.KoObservable()) {
+                    if (reg.ChangedCallback) {
+                        reg.ChangedCallback(reg.KoObservable(), reg.InitialValue);
+                    }
+                    reg.KoObservable(reg.InitialValue);
+                }
+            } else if (paramValue != reg.KoObservable()) {
+                if (reg.ChangedCallback) {
+                    reg.ChangedCallback(reg.KoObservable(), paramValue);
+                }
+                reg.KoObservable(paramValue);
+            }
+        });
     },
 
     ConstructString: function () {

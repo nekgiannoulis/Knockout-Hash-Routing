@@ -16,6 +16,7 @@ $(document).ready(function () {
 
         GeneralTesting: function () {
             history.pushState(null, "Project - ", "?generalTest=5");
+            HashListener.UpdateFromUrl();
         }
     };
 
