@@ -7,6 +7,10 @@ $(document).ready(function () {
 
         Navigate: function (name) {
             vm.NavigationId(name);
+        },
+
+        GoBack: function () {
+            window.history.back();
         }
     };
 
