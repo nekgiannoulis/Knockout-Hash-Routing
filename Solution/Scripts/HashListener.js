@@ -2,14 +2,16 @@
 
 var HashListener = {
     HistoryName: "History",
-    Registrations: [],
+    Routings: [],
 
     Register: function (parameterName, koObservable, changedCallback) {
-        koObservable.HashRegistration = {
+        koObservable.HashRouting = {
             ParameterName: parameterName,
             KoObservable: koObservable,
             ChangedCallback: changedCallback,
-            InitialValue: koObservable()
+            InitialValue: koObservable(),
+            SkipHistory: false,
+            NoHashWhenInitial: false
         };
 
         var params = HashListener.GetUrlVars();
@@ -18,63 +20,67 @@ var HashListener = {
             koObservable(val);
         }
 
-        HashListener.Registrations.push(koObservable.HashRegistration);
+        HashListener.Routings.push(koObservable.HashRouting);
 
         koObservable.subscribe(function (newValue) {
-            var reg = koObservable.HashRegistration;
-            var hashes = HashListener.GetUrlVars()[reg.ParameterName];
-            if (!hashes && newValue == reg.InitialValue) {
+            var routing = koObservable.HashRouting;
+            var hashes = HashListener.GetUrlVars()[routing.ParameterName];
+            if (!hashes && newValue == routing.InitialValue) {
                 return;
             }
 
             if (hashes != newValue) {
                 var url = HashListener.ConstructUrlString();
-                history.pushState(null, HashListener.HistoryName, url);
-                if (reg.ChangedCallback) {
+                //if (routing.SkipHistory) {
+                //    history.replaceState(undefined, undefined, url);
+                //} else {
+                    history.pushState(null, HashListener.HistoryName, url);
+                //}
+                if (routing.ChangedCallback) {
                     if (!hashes) {
-                        reg.ChangedCallback(reg.InitialValue, newValue);
+                        routing.ChangedCallback(routing.InitialValue, newValue);
                     } else {
-                        reg.ChangedCallback(hashes, newValue);
+                        routing.ChangedCallback(hashes, newValue);
                     }
                 }
             }
         });
 
-        window.onpopstate = function (e) {
+        window.onpopstate = function () {
             HashListener.UpdateFromUrl();
         }
 
         if (koObservable()) {
-            if (koObservable.HashRegistration.ChangedCallback) {
-                koObservable.HashRegistration.ChangedCallback(null, koObservable());
+            if (koObservable.HashRouting.ChangedCallback) {
+                koObservable.HashRouting.ChangedCallback(null, koObservable());
             }
         }
     },
 
     UpdateFromUrl: function () {
         var vars = HashListener.GetUrlVars();
-        $.each(HashListener.Registrations, function (index, reg) {
-            var paramValue = vars[reg.ParameterName];
+        $.each(HashListener.Routings, function (index, routing) {
+            var paramValue = vars[routing.ParameterName];
             if (!paramValue) {
-                if (reg.InitialValue != reg.KoObservable()) {
-                    if (reg.ChangedCallback) {
-                        reg.ChangedCallback(reg.KoObservable(), reg.InitialValue);
+                if (routing.InitialValue != routing.KoObservable()) {
+                    if (routing.ChangedCallback) {
+                        routing.ChangedCallback(routing.KoObservable(), routing.InitialValue);
                     }
-                    reg.KoObservable(reg.InitialValue);
+                    routing.KoObservable(routing.InitialValue);
                 }
-            } else if (paramValue != reg.KoObservable()) {
-                if (reg.ChangedCallback) {
-                    reg.ChangedCallback(reg.KoObservable(), paramValue);
+            } else if (paramValue != routing.KoObservable()) {
+                if (routing.ChangedCallback) {
+                    routing.ChangedCallback(routing.KoObservable(), paramValue);
                 }
-                reg.KoObservable(paramValue);
+                routing.KoObservable(paramValue);
             }
         });
     },
 
     ConstructUrlString: function () {
-        var url = '?';
+        var url = "?";
         var found = [];
-        $.each(HashListener.Registrations, function (index, reg) {
+        $.each(HashListener.Routings, function (index, reg) {
             if (reg.KoObservable()) {
                 if (index > 0)
                     url += "&";
@@ -90,7 +96,7 @@ var HashListener = {
             }
         });
 
-        if (url == '?')
+        if (url == "?")
             return null;
         return url;
     },
@@ -99,13 +105,13 @@ var HashListener = {
     GetUrlVars: function () {
         console.log("Getting urls");
         var vars = [], hash;
-        var qIndex = window.location.href.indexOf('?');
+        var qIndex = window.location.href.indexOf("?");
         if (qIndex < 0)
             return vars;
 
-        var hashes = window.location.href.slice(qIndex + 1).split('&');
+        var hashes = window.location.href.slice(qIndex + 1).split("&");
         for (var i = 0; i < hashes.length; i++) {
-            hash = hashes[i].split('=');
+            hash = hashes[i].split("=");
             vars.push(hash[0]);
             vars[hash[0]] = hash[1];
         }

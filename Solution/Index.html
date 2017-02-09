@@ -10,22 +10,21 @@
 </head>
 <body>
 
-    <h2>Welcome <span data-bind="text: Username"></span></h2>
-
     <div data-bind="visible: NavigationId()=='welcome'">
-        This is a welcome page
-        <br />
-        <input type="button" data-bind="click: Navigate.bind($data,'about')" value="About" />
+        <h2>Welcome</h2>
+        This is super easy example, showing how you can easily associate a knockout observable with a url parameter.
+        <br/> Press about for more <input type="button" data-bind="click: Navigate.bind($data,'about')" value="About" />
     </div>
 
 
     <div data-bind="visible: NavigationId()=='about'">
-        This is the about
+        <h2>About</h2>
+        You just Register like <i>HashListener.Register("navId", vm.NavigationId);</i> and the magic happens!
         <br />
-        <input type="button" data-bind="click: GoBack" value="back" />
+        <input type="button" data-bind="click: GoBack" value="back"/>
+
+        <a href="Bootstrap.html" >Bootstrap</a>
     </div>
-
-
 
 
 </body>

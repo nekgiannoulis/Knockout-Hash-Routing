@@ -26,7 +26,9 @@ $(document).ready(function () {
     };
 
     HashListener.Register("n", vm.NavigationId);
+
     HashListener.Register("col", vm.ColorTab.SelectedColor);
+    vm.ColorTab.SelectedColor.HashRouting.SkipHistory = true;
 
     HashListener.Register("plan", vm.PlansTab.PlanKey, function (oldValue, newValue) {
         //select plan based on url key
