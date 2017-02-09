@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-3.1.1.js" type="text/javascript"></script>
+    <script src="Scripts/knockout-3.4.0.js" type="text/javascript"></script>
+    <script src="PageScripts/HashListener.js" type="text/javascript"></script>
+    <script src="PageScripts/TestBindings.js" type="text/javascript"></script>
+</head>
+<body>
+
+    Hey there
+    <br />
+    test content: <span data-bind="text: Test"></span>
+    <br />
+
+<input type="button" data-bind="click: UpdateTest" value="test 1" />
+<br/>
+    test content 2: <span data-bind="text: Test2"></span>
+<br />
+<input type="button" data-bind="click: UpdateTest2" value="test 2"/>
+    
+    <br />
+<br/>
+    <input type="button" data-bind="click: GeneralTesting" value="test 2" />
+
+</body>
+</html>
