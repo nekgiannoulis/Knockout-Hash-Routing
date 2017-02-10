@@ -13,6 +13,10 @@ var HashRouting = {
             SkipHashWhenInitial: true
         };
 
+        koObservable.Update = function (data) {
+            koObservable(data);
+        }
+
         var params = HashRouting.GetUrlVars();
         var val = params[parameterName];
         if (val) {
@@ -85,13 +89,10 @@ var HashRouting = {
         };
 
         $.each(HashRouting.Routings, function (index, reg) {
-            if (reg.KoObservable()) {
-                if (!(reg.SkipHashWhenInitial && reg.KoObservable() === reg.InitialValue)) {
-                    addParam(reg.ParameterName, reg.KoObservable());
-                }
-                proccessed.push(reg.ParameterName);
-
+            if (!(reg.SkipHashWhenInitial && reg.KoObservable() === reg.InitialValue)) {
+                addParam(reg.ParameterName, reg.KoObservable());
             }
+            proccessed.push(reg.ParameterName);
         });
 
         var currentVars = HashRouting.GetUrlVars();
