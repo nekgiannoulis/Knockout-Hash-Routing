@@ -25,12 +25,12 @@ $(document).ready(function () {
         }
     };
 
-    HashListener.Register("n", vm.NavigationId);
+    HashRouting.Register("n", vm.NavigationId);
 
-    HashListener.Register("col", vm.ColorTab.SelectedColor);
+    HashRouting.Register("col", vm.ColorTab.SelectedColor);
     vm.ColorTab.SelectedColor.HashRouting.SkipHistory = true;
 
-    HashListener.Register("plan", vm.PlansTab.PlanKey, function (oldValue, newValue) {
+    HashRouting.Register("plan", vm.PlansTab.PlanKey, function (oldValue, newValue) {
         //select plan based on url key
         for (var i = 0; i < vm.PlansTab.AvailablePlans.length; i++) {
             var plan = vm.PlansTab.AvailablePlans[i];

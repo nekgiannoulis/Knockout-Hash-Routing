@@ -13,7 +13,7 @@ $(document).ready(function () {
         }
     };
 
-    HashListener.Register("navId", vm.NavigationId);
+    HashRouting.Register("navId", vm.NavigationId);
 
     ko.applyBindings(vm);
 });

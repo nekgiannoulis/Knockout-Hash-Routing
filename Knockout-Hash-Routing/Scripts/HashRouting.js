@@ -1,6 +1,6 @@
 ﻿
 
-var HashListener = {
+var HashRouting = {
     HistoryName: "History",
     Routings: [],
 
@@ -14,27 +14,27 @@ var HashListener = {
             NoHashWhenInitial: false
         };
 
-        var params = HashListener.GetUrlVars();
+        var params = HashRouting.GetUrlVars();
         var val = params[parameterName];
         if (val) {
             koObservable(val);
         }
 
-        HashListener.Routings.push(koObservable.HashRouting);
+        HashRouting.Routings.push(koObservable.HashRouting);
 
         koObservable.subscribe(function (newValue) {
             var routing = koObservable.HashRouting;
-            var hashes = HashListener.GetUrlVars()[routing.ParameterName];
+            var hashes = HashRouting.GetUrlVars()[routing.ParameterName];
             if (!hashes && newValue == routing.InitialValue) {
                 return;
             }
 
             if (hashes != newValue) {
-                var url = HashListener.ConstructUrlString();
+                var url = HashRouting.ConstructUrlString();
                 //if (routing.SkipHistory) {
                 //    history.replaceState(undefined, undefined, url);
                 //} else {
-                    history.pushState(null, HashListener.HistoryName, url);
+                    history.pushState(null, HashRouting.HistoryName, url);
                 //}
                 if (routing.ChangedCallback) {
                     if (!hashes) {
@@ -47,7 +47,7 @@ var HashListener = {
         });
 
         window.onpopstate = function () {
-            HashListener.UpdateFromUrl();
+            HashRouting.UpdateFromUrl();
         }
 
         if (koObservable()) {
@@ -58,8 +58,8 @@ var HashListener = {
     },
 
     UpdateFromUrl: function () {
-        var vars = HashListener.GetUrlVars();
-        $.each(HashListener.Routings, function (index, routing) {
+        var vars = HashRouting.GetUrlVars();
+        $.each(HashRouting.Routings, function (index, routing) {
             var paramValue = vars[routing.ParameterName];
             if (!paramValue) {
                 if (routing.InitialValue != routing.KoObservable()) {
@@ -80,7 +80,7 @@ var HashListener = {
     ConstructUrlString: function () {
         var url = "?";
         var found = [];
-        $.each(HashListener.Routings, function (index, reg) {
+        $.each(HashRouting.Routings, function (index, reg) {
             if (reg.KoObservable()) {
                 if (index > 0)
                     url += "&";
@@ -89,7 +89,7 @@ var HashListener = {
             }
         });
 
-        var currentVars = HashListener.GetUrlVars();
+        var currentVars = HashRouting.GetUrlVars();
         $.each(currentVars, function (index, rec) {
             if (found.indexOf(rec) < 0) {
                 url += "&" + rec + "=" + currentVars[rec];
