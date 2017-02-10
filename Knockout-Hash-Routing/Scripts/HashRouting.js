@@ -10,8 +10,7 @@ var HashRouting = {
             KoObservable: koObservable,
             ChangedCallback: changedCallback,
             InitialValue: koObservable(),
-            SkipHistory: false,
-            NoHashWhenInitial: false
+            SkipHashWhenInitial: true
         };
 
         var params = HashRouting.GetUrlVars();
@@ -31,11 +30,7 @@ var HashRouting = {
 
             if (hashes != newValue) {
                 var url = HashRouting.ConstructUrlString();
-                //if (routing.SkipHistory) {
-                //    history.replaceState(undefined, undefined, url);
-                //} else {
-                    history.pushState(null, HashRouting.HistoryName, url);
-                //}
+                history.pushState(null, HashRouting.HistoryName, url);
                 if (routing.ChangedCallback) {
                     if (!hashes) {
                         routing.ChangedCallback(routing.InitialValue, newValue);
@@ -79,25 +74,35 @@ var HashRouting = {
 
     ConstructUrlString: function () {
         var url = "?";
-        var found = [];
+        var proccessed = [];
+        var paramsCount = 0;
+
+        var addParam = function (name, value) {
+            if (paramsCount > 0)
+                url += "&";
+            url += name + "=" + value;
+            paramsCount++;
+        };
+
         $.each(HashRouting.Routings, function (index, reg) {
             if (reg.KoObservable()) {
-                if (index > 0)
-                    url += "&";
-                url += reg.ParameterName + "=" + reg.KoObservable();
-                found.push(reg.ParameterName);
+                if (!(reg.SkipHashWhenInitial && reg.KoObservable() === reg.InitialValue)) {
+                    addParam(reg.ParameterName, reg.KoObservable());
+                }
+                proccessed.push(reg.ParameterName);
+
             }
         });
 
         var currentVars = HashRouting.GetUrlVars();
         $.each(currentVars, function (index, rec) {
-            if (found.indexOf(rec) < 0) {
-                url += "&" + rec + "=" + currentVars[rec];
+            if (proccessed.indexOf(rec) < 0) {
+                addParam(rec, currentVars[rec]);
             }
         });
 
         if (url == "?")
-            return null;
+            return "?";
         return url;
     },
 
@@ -106,7 +111,7 @@ var HashRouting = {
         console.log("Getting urls");
         var vars = [], hash;
         var qIndex = window.location.href.indexOf("?");
-        if (qIndex < 0)
+        if (qIndex < 0 || qIndex == window.location.href.length - 1)
             return vars;
 
         var hashes = window.location.href.slice(qIndex + 1).split("&");
