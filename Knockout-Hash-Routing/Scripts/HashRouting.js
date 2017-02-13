@@ -118,6 +118,7 @@ var HashRouting = {
         var hashes = window.location.href.slice(qIndex + 1).split("&");
         for (var i = 0; i < hashes.length; i++) {
             hash = hashes[i].split("=");
+            hash[1] = hash[1].replace("#", "");
             vars.push(hash[0]);
             vars[hash[0]] = hash[1];
         }
