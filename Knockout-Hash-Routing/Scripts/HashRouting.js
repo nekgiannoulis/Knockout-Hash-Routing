@@ -19,7 +19,8 @@ var HashRouting = {
             KoObservable: koObservable,
             ChangedCallback: changedCallback,
             InitialValue: koObservable(),
-            SkipHashWhenInitial: true
+            SkipHashWhenInitial: true,
+            SkipHistory: false
         };
 
         koObservable.Update = function (data) {
@@ -59,8 +60,13 @@ var HashRouting = {
 
                 if (!e.Cancel) {
                     var url = HashRouting.ConstructUrlString();
-                    if (HashRouting.AutoUpdating)
-                        history.pushState(null, HashRouting.HistoryName, url);
+                    if (HashRouting.AutoUpdating) {
+                        if (!routing.SkipHistory) {
+                            history.pushState(null, HashRouting.HistoryName, url);
+                        } else {
+                            history.replaceState(null, HashRouting.HistoryName, url);
+                        }
+                    }
                 } else {
                     if (hashes) {
                         koObservable(hashes);
